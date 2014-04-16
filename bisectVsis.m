@@ -10,8 +10,7 @@ end
 % Find VSIs 
 vsiFiles = findVsis(startingImagePath, startingSavePath);
 
-parpool(6)
-parfor i = 1:length(vsiFiles)
+for i = 1:length(vsiFiles)
 % Load VSI
     vsi = bfopen(vsiFiles(i).path);
 
