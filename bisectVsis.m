@@ -1,25 +1,24 @@
-function vsiFiles = bisectVsis(startingImagePath, startingSavePath)
+function bisectVsis(startingImagePath, startingSavePath)
 
 if ~exist('startingImagePath', 'var')
-    startingImagePath = '';
+    startingImagePath = '/hms/scratch1/sr235/ccValidation_03-18-14';
 end
 
 if ~exist('startingSavePath', 'var')
-    startingSavePath = '';
+    startingSavePath = '/hms/scratch1/sr235/ccValidation_03-18-14_hemisphere_tifs';
 end
 % Find VSIs 
 vsiFiles = findVsis(startingImagePath, startingSavePath);
 
-
-
+parpool(6)
 parfor i = 1:length(vsiFiles)
 % Load VSI
     vsi = bfopen(vsiFiles(i).path);
 
 % Construct RGB image
     rgb = zeros([size(vsi{1,1}{1,1}), 3]);
-    rgb(:,:,3) = mat2gray(vsi{1,1}{1,1});
     rgb(:,:,2) = mat2gray(vsi{1,1}{2,1});
+    rgb(:,:,3) = mat2gray(vsi{1,1}{1,1});
 
     imageWidth = size(vsi{1,1}{1,1}, 2);
     % Sample right hemisphere
