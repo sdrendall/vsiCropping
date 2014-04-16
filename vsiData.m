@@ -1,4 +1,4 @@
-classdef vsiData
+classdef vsiData < handle
     properties
         path
         containingDirName
@@ -26,7 +26,7 @@ classdef vsiData
             [~, obj.containingDirName] = fileparts(obj.containingDirPath);
 
             % Ensure dump path
-            obj.ensureDumpPath(dataDumpPath)
+            %obj.ensureDumpPath(dataDumpPath)
         end
 
         function ensureDumpPath(self, dumpPath)

@@ -5,14 +5,15 @@ function vsiFiles = bisectVsis(startingImagePath, startingSavePath)
 
 % Find VSIs 
 vsiFiles = findVsis(startingImagePath, startingSavePath);
+vsiFiles(1)
 
 
-parfor i = 1:length(vsiFiles)
+for i = 1:length(vsiFiles)
 % Load VSI
     vsi = bfopen(vsiFiles(i).path);
 
 % Construct RGB image
-    rgb = zeros(size([vsi{1,1}{1,1}, 3]));
+    rgb = zeros([size(vsi{1,1}{1,1}), 3]);
     rgb(:,:,2) = vsi{1,1}{1,1};
     rgb(:,:,3) = vsi{1,1}{2,1};
 
