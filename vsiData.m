@@ -26,7 +26,8 @@ classdef vsiData < handle
             [~, obj.containingDirName] = fileparts(obj.containingDirPath);
 
             % Ensure dump path
-            %obj.ensureDumpPath(dataDumpPath)
+            obj.ensureDumpPath(dataDumpPath)
+            obj
         end
 
         function ensureDumpPath(self, dumpPath)
