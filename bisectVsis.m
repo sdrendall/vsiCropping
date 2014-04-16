@@ -19,6 +19,7 @@ for i = 1:length(vsiFiles)
     rgb(:,:,2) = mat2gray(vsi{1,1}{2,1});
     rgb(:,:,3) = mat2gray(vsi{1,1}{1,1});
 
+    % Sample right hemisphere
     imageWidth = size(vsi{1,1}{1,1}, 2);
     % Sample right hemisphere
     sampleIm = rgb(:, 1:ceil(imageWidth*4/7), :);            
@@ -28,7 +29,7 @@ for i = 1:length(vsiFiles)
     imwrite(sampleIm, fullfile(vsiFiles(i).dataPath, writeName))
 
     % Sample left hemisphere
-    sampleIm = rgb(:, imageWidth*floor(3/7:imageWidth), :);
+    sampleIm = rgb(:, floor(imageWidth*3/7):imageWidth, :);
     % Save
     writeName = [nameNoExt, '-L.tif'];
     imwrite(sampleIm, fullfile(vsiFiles(i).dataPath, writeName))
