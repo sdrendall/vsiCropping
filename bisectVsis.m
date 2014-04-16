@@ -15,7 +15,7 @@ for i = 1:length(vsiFiles)
     rightSideName = fullfile(vsiFile(i).dataPath, [nameNoExt, '-R.tif']);
     leftSideName = fullfile(vsiFile(i).dataPath, [nameNoExt, '-L.tif']);
     if ~exist(rightSideName, 'file') || ~exist(leftSideName, 'file')
-        bisectVSI(vsiFile)
+        bisectVSI(vsiFiles(i))
     end
 end
 
