@@ -14,19 +14,19 @@ for i = 1:length(vsiFiles)
 
 % Construct RGB image
     rgb = zeros([size(vsi{1,1}{1,1}), 3]);
-    rgb(:,:,2) = mat2gray(vsi{1,1}{1,1});
-    rgb(:,:,3) = mat2gray(vsi{1,1}{2,1});
+    rgb(:,:,3) = mat2gray(vsi{1,1}{1,1});
+    rgb(:,:,2) = mat2gray(vsi{1,1}{2,1});
 
     imageWidth = size(vsi{1,1}{1,1}, 2);
     % Sample right hemisphere
-    sampleIm = rgb(:, 1:imageWidth*3/5, :);            
+    sampleIm = rgb(:, 1:imageWidth*4/7, :);            
     % Save sample
     [~, nameNoExt] = fileparts(vsiFiles(i).name);
     writeName = [nameNoExt, '-R.tif'];
     imwrite(sampleIm, fullfile(vsiFiles(i).dataPath, writeName))
 
     % Sample left hemisphere
-    sampleIm = rgb(:, imageWidth*2/5:imageWidth, :);
+    sampleIm = rgb(:, imageWidth*3/7:imageWidth, :);
     % Save
     writeName = [nameNoExt, '-L.tif'];
     imwrite(sampleIm, fullfile(vsiFiles(i).dataPath, writeName))
