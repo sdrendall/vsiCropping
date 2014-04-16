@@ -1,8 +1,12 @@
 function vsiFiles = bisectVsis(startingImagePath, startingSavePath)
 
-startingImagePath = '';
-startingSavePath = '';
+if ~exist('startingImagePath', 'var')
+    startingImagePath = '';
+end
 
+if ~exist('startingSavePath', 'var')
+    startingSavePath = '';
+end
 % Find VSIs 
 vsiFiles = findVsis(startingImagePath, startingSavePath);
 
