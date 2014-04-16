@@ -17,7 +17,7 @@ for i = 1:length(vsiFiles)
     rgb(:,:,2) = mat2gray(vsi{1,1}{1,1});
     rgb(:,:,3) = mat2gray(vsi{1,1}{2,1});
 
-    imageWidth = size(vsi{1,1}{1,1}, 2)
+    imageWidth = size(vsi{1,1}{1,1}, 2);
     % Sample right hemisphere
     sampleIm = rgb(:, 1:imageWidth*3/5, :);            
     % Save sample
