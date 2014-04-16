@@ -1,14 +1,14 @@
 function vsiFiles = bisectVsis(startingImagePath, startingSavePath)
 
-%startingImagePath = '';
-%startingSavePath = '';
+startingImagePath = '';
+startingSavePath = '';
 
 % Find VSIs 
 vsiFiles = findVsis(startingImagePath, startingSavePath);
 
 
 
-for i = 1:length(vsiFiles)
+parfor i = 1:length(vsiFiles)
 % Load VSI
     vsi = bfopen(vsiFiles(i).path);
 
@@ -19,14 +19,14 @@ for i = 1:length(vsiFiles)
 
     imageWidth = size(vsi{1,1}{1,1}, 2);
     % Sample right hemisphere
-    sampleIm = rgb(:, 1:imageWidth*4/7, :);            
+    sampleIm = rgb(:, 1:ceil(imageWidth*4/7), :);            
     % Save sample
     [~, nameNoExt] = fileparts(vsiFiles(i).name);
     writeName = [nameNoExt, '-R.tif'];
     imwrite(sampleIm, fullfile(vsiFiles(i).dataPath, writeName))
 
     % Sample left hemisphere
-    sampleIm = rgb(:, imageWidth*3/7:imageWidth, :);
+    sampleIm = rgb(:, imageWidth*floor(3/7:imageWidth), :);
     % Save
     writeName = [nameNoExt, '-L.tif'];
     imwrite(sampleIm, fullfile(vsiFiles(i).dataPath, writeName))
