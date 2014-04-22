@@ -16,6 +16,8 @@ for i = 1:length(vsiFiles)
     leftSideName = fullfile(vsiFiles(i).dataPath, [nameNoExt, '-L.tif']);
     if ~exist(rightSideName, 'file') || ~exist(leftSideName, 'file')
         bisectVSI(vsiFiles(i))
+    else
+        disp(['image ', vsiFiles(i).name, ' has been cropped'])
     end
 end
 
