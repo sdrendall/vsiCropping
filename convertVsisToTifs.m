@@ -36,9 +36,10 @@ function convertToTif(vsiFile, targetDimensions)
     vsi = bfopen(vsiFile.path);
 
     % Construct RGB image
+    marginSize = targetDimensions - size(vsi{1,1}{2,1});
     rgb = zeros([targetDimensions, 3]);
-    rgb(:,:,2) = padarray(mat2gray(vsi{1,1}{2,1}), targetDimensions, 'post');
-    rgb(:,:,3) = padarray(mat2gray(vsi{1,1}{1,1}), targetDimensions, 'post');
+    rgb(:,:,2) = padarray(mat2gray(vsi{1,1}{2,1}), marginSize, 'post');
+    rgb(:,:,3) = padarray(mat2gray(vsi{1,1}{1,1}), marginSize, 'post');
 
     % Save to tif
     [~, nameNoExt] = fileparts(vsiFile.name);
