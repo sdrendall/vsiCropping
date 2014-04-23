@@ -44,7 +44,7 @@ function convertToTif(vsiFile, targetDimensions)
     % Save to tif
     [~, nameNoExt] = fileparts(vsiFile.name);
     writeName = [nameNoExt, '.tif'];
-    imwrite(sampleIm, fullfile(vsiFile.dataPath, writeName))
+    imwrite(rgb, fullfile(vsiFile.dataPath, writeName))
 
 
 function vsiFiles = findVsis(locationPath, savePath)
