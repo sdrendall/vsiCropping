@@ -18,7 +18,7 @@ end
 function dims = findLargestImageSize(vsiFiles)
     dims = [0,0];
     for i = 1:length(vsiFiles)
-        reader = bfGetReader(vsiFiles(i).dataPath);
+        reader = bfGetReader(vsiFiles(i).path);
         m = reader.getMetadataStore();
         h = m.getPixelsSizeY(0).getValue();
         w = m.getPixelsSizeX(0).getValue();
