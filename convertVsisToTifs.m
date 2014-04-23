@@ -12,7 +12,7 @@ vsiFiles = findVsis(startingImagePath, startingSavePath);
 maxDims = findLargestImageSize(vsiFiles);
 
 for i = 1:length(vsiFiles)
-    convertToTif(vsiFiles(i))
+    convertToTif(vsiFiles(i), maxDims)
 end
 
 function dims = findLargestImageSize(vsiFiles)
