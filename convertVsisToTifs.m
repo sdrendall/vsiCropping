@@ -1,4 +1,4 @@
-function bisectVsis(startingImagePath, startingSavePath)
+function convertVsisToTifs(startingImagePath, startingSavePath)
 
 if ~exist('startingImagePath', 'var')
     startingImagePath = '/hms/scratch1/sr235/ccValidation_03-18-14';
@@ -9,40 +9,40 @@ if ~exist('startingSavePath', 'var')
 end
 % Find VSIs 
 vsiFiles = findVsis(startingImagePath, startingSavePath);
+maxDims = findLargestImageSize(vsiFiles);
 
 for i = 1:length(vsiFiles)
-    [~, nameNoExt] = fileparts(vsiFiles(i).name);
-    rightSideName = fullfile(vsiFiles(i).dataPath, [nameNoExt, '-R.tif']);
-    leftSideName = fullfile(vsiFiles(i).dataPath, [nameNoExt, '-L.tif']);
-    if ~exist(rightSideName, 'file') || ~exist(leftSideName, 'file')
-        bisectVSI(vsiFiles(i))
-    else
-        disp(['image ', vsiFiles(i).name, ' has been cropped'])
-    end
+    convertToTif(vsiFiles(i))
 end
 
-function bisectVSI(vsiFile)
+function dims = findLargestImageSize(vsiFiles)
+    dims = [0,0];
+    for i = 1:length(vsiFiles)
+        reader = bfGetReader(vsiFiles(i).dataPath);
+        m = reader.getMetadataStore();
+        h = m.getPixelsSizeY(0).getValue();
+        w = m.getPixelsSizeX(0).getValue();
+        if h > dims(1)
+            dims(1) = h;
+        end
+        if w > dims(2)
+            dims(2) = w;
+        end
+    end
+
+
+function convertToTif(vsiFile, targetDimensions)
     % Load VSI
     vsi = bfopen(vsiFile.path);
 
     % Construct RGB image
-    rgb = zeros([size(vsi{1,1}{1,1}), 3]);
-    rgb(:,:,2) = mat2gray(vsi{1,1}{2,1});
-    rgb(:,:,3) = mat2gray(vsi{1,1}{1,1});
+    rgb = zeros([targetDimensions, 3]);
+    rgb(:,:,2) = padarray(mat2gray(vsi{1,1}{2,1}), targetDimensions, 'post');
+    rgb(:,:,3) = padarray(mat2gray(vsi{1,1}{1,1}), targetDimensions, 'post');
 
-    % Sample right hemisphere
-    imageWidth = size(vsi{1,1}{1,1}, 2);
-    % Sample right hemisphere
-    sampleIm = rgb(:, 1:ceil(imageWidth*4/7), :);            
-    % Save sample
+    % Save to tif
     [~, nameNoExt] = fileparts(vsiFile.name);
-    writeName = [nameNoExt, '-R.tif'];
-    imwrite(sampleIm, fullfile(vsiFile.dataPath, writeName))
-
-    % Sample left hemisphere
-    sampleIm = rgb(:, floor(imageWidth*3/7):imageWidth, :);
-    % Save
-    writeName = [nameNoExt, '-L.tif'];
+    writeName = [nameNoExt, '.tif'];
     imwrite(sampleIm, fullfile(vsiFile.dataPath, writeName))
 
 
