@@ -16,7 +16,7 @@ for i = 1:length(vsiFiles)
     % check for existing file
     [~, nameNoExt] = fileparts(vsiFiles(i).name);
     writeName = [nameNoExt, '.ome.tiff'];
-    destPath = fullfile(vsiFile.dataPath, writeName);
+    destPath = fullfile(vsiFiles(i).dataPath, writeName);
     if ~exist(destPath, 'file')
         convertToTif(vsiFiles(i), maxDims)
     end
