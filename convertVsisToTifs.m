@@ -9,11 +9,7 @@ if ~exist('startingSavePath', 'var')
 end
 % Find VSIs 
 vsiFiles = findVsis(startingImagePath, startingSavePath);
-if ~isempty(vsiFiles)
-    maxDims = findLargestImageSize(vsiFiles);
-else
-    error(['No Vsis found at ', startingImagePath])
-end
+maxDims = findLargestImageSize(vsiFiles);
 
 for i = 1:length(vsiFiles)
     convertToTif(vsiFiles(i), maxDims)
@@ -49,6 +45,8 @@ function convertToTif(vsiFile, targetDimensions)
     [~, nameNoExt] = fileparts(vsiFile.name);
     writeName = [nameNoExt, '.ome.tiff'];
     bfsave(rgb, fullfile(vsiFile.dataPath, writeName), 'compression', 'LZW', 'dimensionOrder', 'XYZTC', 'BigTiff', true)
+
+    clear rgb vsi
 
 
 function vsiFiles = findVsis(locationPath, savePath)
