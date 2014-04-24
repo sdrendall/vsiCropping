@@ -43,8 +43,8 @@ function convertToTif(vsiFile, targetDimensions)
 
     % Save to tif
     [~, nameNoExt] = fileparts(vsiFile.name);
-    writeName = [nameNoExt, '.tiff'];
-    bfsave(rgb, fullfile(vsiFile.dataPath, writeName))
+    writeName = [nameNoExt, '.ome.tiff'];
+    bfsave(rgb, fullfile(vsiFile.dataPath, writeName), 'compression', 'LZW', 'dimensionOrder', 'XYZTC', 'BigTiff', true)
 
 
 function vsiFiles = findVsis(locationPath, savePath)
