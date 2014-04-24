@@ -11,8 +11,15 @@ end
 vsiFiles = findVsis(startingImagePath, startingSavePath);
 maxDims = findLargestImageSize(vsiFiles);
 
+
 for i = 1:length(vsiFiles)
-    convertToTif(vsiFiles(i), maxDims)
+    % check for existing file
+    [~, nameNoExt] = fileparts(vsiFiles(i).name);
+    writeName = [nameNoExt, '.ome.tiff'];
+    destPath = fullfile(vsiFile.dataPath, writeName);
+    if ~exist(destPath, 'file')
+        convertToTif(vsiFiles(i), maxDims)
+    end
 end
 
 function dims = findLargestImageSize(vsiFiles)
