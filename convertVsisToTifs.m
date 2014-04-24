@@ -9,7 +9,11 @@ if ~exist('startingSavePath', 'var')
 end
 % Find VSIs 
 vsiFiles = findVsis(startingImagePath, startingSavePath);
-maxDims = findLargestImageSize(vsiFiles);
+if ~isempty(vsiFiles)
+    maxDims = findLargestImageSize(vsiFiles);
+else
+    error(['No Vsis found at ', startingImagePath])
+end
 
 for i = 1:length(vsiFiles)
     convertToTif(vsiFiles(i), maxDims)
