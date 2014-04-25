@@ -1,5 +1,7 @@
 function convertVsisToTifs(startingImagePath, startingSavePath)
 
+disp('Starting......')
+
 if ~exist('startingImagePath', 'var')
     startingImagePath = '/hms/scratch1/sr235/ccValidation_03-18-14';
 end
@@ -8,7 +10,10 @@ if ~exist('startingSavePath', 'var')
     startingSavePath = '/hms/scratch1/sr235/ccValidation_03-18-14_hemisphere_tifs';
 end
 % Find VSIs 
+disp('Searching for Vsis.......')
 vsiFiles = findVsis(startingImagePath, startingSavePath);
+
+disp('Calculating Output Image Dimensions........')
 maxDims = findLargestImageSize(vsiFiles);
 
 
@@ -17,10 +22,16 @@ for i = 1:length(vsiFiles)
     [~, nameNoExt] = fileparts(vsiFiles(i).name);
     writeName = [nameNoExt, '.ome.tiff'];
     destPath = fullfile(vsiFiles(i).dataPath, writeName);
+    disp(['Checking for ', writeName, 'in ', destPath])
     if ~exist(destPath, 'file')
+        disp(['Converting ', vsiFiles(i).name, 'to tiff ', writeName])
         convertToTif(vsiFiles(i), maxDims)
+    else
+        disp([writeName, 'found in ', destPath, '.  Moving to next image])
     end
 end
+
+disp('Process Complete!')
 
 function dims = findLargestImageSize(vsiFiles)
     dims = [0,0];
