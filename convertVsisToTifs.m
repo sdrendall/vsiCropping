@@ -9,6 +9,7 @@ end
 if ~exist('startingSavePath', 'var')
     startingSavePath = '/hms/scratch1/sr235/ccValidation_03-18-14_hemisphere_tifs';
 end
+
 % Find VSIs 
 disp('Searching for Vsis.......')
 vsiFiles = findVsis(startingImagePath, startingSavePath);
@@ -22,12 +23,14 @@ for i = 1:length(vsiFiles)
     [~, nameNoExt] = fileparts(vsiFiles(i).name);
     writeName = [nameNoExt, '.ome.tiff'];
     destPath = fullfile(vsiFiles(i).dataPath, writeName);
-    disp(['Checking for ', writeName, 'in ', destPath])
+    disp(['Checking for ', writeName])
     if ~exist(destPath, 'file')
         disp(['Converting ', vsiFiles(i).name, 'to tiff ', writeName])
+        tic
         convertToTif(vsiFiles(i), maxDims)
+        toc
     else
-        disp([writeName, 'found in ', destPath, '.  Moving to next image])
+        disp(['Found ', writeName, '.  Moving to next image]')
     end
 end
 
@@ -37,9 +40,8 @@ function dims = findLargestImageSize(vsiFiles)
     dims = [0,0];
     for i = 1:length(vsiFiles)
         reader = bfGetReader(vsiFiles(i).path);
-        m = reader.getMetadataStore();
-        h = m.getPixelsSizeY(0).getValue();
-        w = m.getPixelsSizeX(0).getValue();
+        h = reader.getSizeY;
+        w = reader.getSizeX;
         if h > dims(1)
             dims(1) = h;
         end
@@ -55,16 +57,23 @@ function convertToTif(vsiFile, targetDimensions)
 
     % Construct RGB image
     marginSize = targetDimensions - size(vsi{1,1}{2,1});
-    rgb = zeros([targetDimensions, 3]);
-    rgb(:,:,2) = padarray(mat2gray(vsi{1,1}{2,1}), marginSize, 'post');
-    rgb(:,:,3) = padarray(mat2gray(vsi{1,1}{1,1}), marginSize, 'post');
+    rgb = zeros([targetDimensions, 3], 'uint8');
+    rgb(:,:,2) = toUint8(padarray(mat2gray(vsi{1,1}{2,1}), marginSize, 'post'));
+    rgb(:,:,3) = toUint8(padarray(mat2gray(vsi{1,1}{1,1}), marginSize, 'post'));
 
     % Save to tif
     [~, nameNoExt] = fileparts(vsiFile.name);
-    writeName = [nameNoExt, '.ome.tiff'];
-    bfsave(rgb, fullfile(vsiFile.dataPath, writeName), 'compression', 'LZW', 'dimensionOrder', 'XYZTC', 'BigTiff', true)
+    writeName = [nameNoExt, '.tif'];
+    bfsave(rgb, fullfile(vsiFile.dataPath, writeName))
 
     clear rgb vsi
+
+
+function im = toUint8(im)
+    % Converts im to uint8, normalizes to 0-255
+    im = im - min(im(:));
+    im = im ./ max(im());
+    im = uint8(im .* 255);
 
 
 function vsiFiles = findVsis(locationPath, savePath)
