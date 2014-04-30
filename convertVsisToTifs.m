@@ -21,7 +21,7 @@ maxDims = findLargestImageSize(vsiFiles);
 for i = 1:length(vsiFiles)
     % check for existing file
     [~, nameNoExt] = fileparts(vsiFiles(i).name);
-    writeName = [nameNoExt, '.ome.tiff'];
+    writeName = [nameNoExt, '.tif'];
     destPath = fullfile(vsiFiles(i).dataPath, writeName);
     disp(['Checking for ', writeName])
     if ~exist(destPath, 'file')
