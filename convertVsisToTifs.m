@@ -30,7 +30,7 @@ for i = 1:length(vsiFiles)
         convertToTif(vsiFiles(i), maxDims)
         toc
     else
-        disp(['Found ', writeName, '.  Moving to next image]')
+        disp(['Found ', writeName, '.  Moving to next image'])
     end
 end
 
