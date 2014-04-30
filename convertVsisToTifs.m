@@ -72,7 +72,7 @@ function convertToTif(vsiFile, targetDimensions)
 function im = toUint8(im)
     % Converts im to uint8, normalizes to 0-255
     im = im - min(im(:));
-    im = im ./ max(im());
+    im = im ./ max(im(:));
     im = uint8(im .* 255);
 
 
