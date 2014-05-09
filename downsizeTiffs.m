@@ -14,5 +14,5 @@ parfor i = 1:length(imagePaths)
     % normalize - may lose dynamic range.  Fine for this purpose.
     im = mat2gray(im);
 
-    imwrite(im, outputPaths{i})
+    imwrite(im, outputPath)
 end
