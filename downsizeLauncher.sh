@@ -6,5 +6,6 @@ do
     ims=`find $mouse -type f -name "*.tif"`
     IFS="','"
     imPaths=\{\'${ims[*]}\'\}
-    bsub -q short -W 3:00 -e ~/jobLogs/`basename $mouse`.err -o ~/jobLogs/`basename $mouse`.log -R "rusage[mem=16000]" matlab -nosplash -nojvm -r "downsizeTiffs($imPaths)"
+    logName=`echo $mouse | cut -d '/' -f 7`
+    bsub -q short -W 3:00 -e ~/jobLogs/$logName.err -o ~/jobLogs/$logName.log -R "rusage[mem=16000]" matlab -nosplash -nojvm -r "downsizeTiffs($imPaths)"
 done
