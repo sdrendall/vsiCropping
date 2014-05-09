@@ -4,9 +4,10 @@ for mouse in `find ~/sr235/ccValidation_03-18-14_croppedHemispheres_tifs -mindep
 do
     ims=`find $mouse -type f -name "*.tif"`
     save_IFS=$IFS
-    IFS="}','{"
+    IFS="','"
     imPaths=${ims[*]}
     IFS=$save_IFS
+    echo $imPaths
     logName=`echo $mouse | cut -d '/' -f 7`
     bsub -q short -W 3:00 -e ~/jobLogs/$logName.err -o ~/jobLogs/$logName.log -R "rusage[mem=16000]" matlab -nosplash -nojvm -r "downsizeTiffs({'$imPaths'})"
 done
